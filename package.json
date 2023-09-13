@@ -7,9 +7,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "hardhat compile",
-    "clean": "hardhat clean",
-    "test": "hardhat test"
+    "test": "ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -18,7 +16,9 @@
   "dependencies": {
     "@openzeppelin/contracts": "~4.8.3",
     "@openzeppelin/contracts-upgradeable": "~4.8.3",
-    "bn.js": "~5.2.1"
+    "bn.js": "~5.2.1",
+    "ethers": "^5.7.2",
+    "harhat": "^1.0.1"
   },
   "devDependencies": {
     "@coin98/solidity-support-library": "~0.5.0",

@@ -10,6 +10,6 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "strict": true,
-    "target": "ES5"
+    "target": "ES6"
   }
 }
