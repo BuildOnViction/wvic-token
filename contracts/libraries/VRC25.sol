@@ -183,16 +183,6 @@ abstract contract VRC25 is IVRC25, IERC165 {
   }
 
   /**
-   * @notice Remove `amount` tokens owned by caller from circulation.
-   */
-  function burn(uint256 amount) external returns (bool) {
-    uint256 fee = estimateFee(0);
-    _burn(msg.sender, amount);
-    _chargeFeeFrom(msg.sender, address(this), fee);
-    return true;
-  }
-
-  /**
    * @dev Accept the ownership transfer. This is to make sure that the contract is
    * transferred to a working address
    *
