@@ -13,7 +13,7 @@ const etherscanApi = process.env.ETHERSCAN_API_KEY || '';
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.17',
+    version: '0.7.6',
     settings: {
       optimizer: {
         enabled: true,
