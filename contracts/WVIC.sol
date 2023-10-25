@@ -22,7 +22,23 @@ contract WVIC is VRC25Permit, IWVIC {
      * @notice Deposit native token to receive equivalent wrapped VRC25 token
      * Amount of token received token equal `msg.value`
      */
-    function deposit() external payable override {
+    receive() external payable {
+        deposit();
+    }
+
+    /**
+     * @notice Deposit native token to receive equivalent wrapped VRC25 token
+     * Amount of token received token equal `msg.value`
+     */
+    fallback() external payable {
+        deposit();
+    }
+
+    /**
+     * @notice Deposit native token to receive equivalent wrapped VRC25 token
+     * Amount of token received token equal `msg.value`
+     */
+    function deposit() public payable override {
         uint256 fee = estimateFee(0);
         _mint(msg.sender, msg.value);
         _chargeFeeFrom(msg.sender, address(this), fee);
