@@ -22,7 +22,23 @@ contract WVIC is VRC25Permit, IWVIC {
      * @notice Deposit native token to receive equivalent wrapped VRC25 token
      * Amount of token received token equal `msg.value`
      */
-    function deposit() external payable override {
+    receive() external payable {
+        deposit();
+    }
+
+    /**
+     * @notice Deposit native token to receive equivalent wrapped VRC25 token
+     * Amount of token received token equal `msg.value`
+     */
+    fallback() external payable {
+        deposit();
+    }
+
+    /**
+     * @notice Deposit native token to receive equivalent wrapped VRC25 token
+     * Amount of token received token equal `msg.value`
+     */
+    function deposit() public payable override {
         uint256 fee = estimateFee(0);
         _mint(msg.sender, msg.value);
         _chargeFeeFrom(msg.sender, address(this), fee);
@@ -33,11 +49,19 @@ contract WVIC is VRC25Permit, IWVIC {
      * @notice Withdraw native token by exchanging wrapped token
      * @param value Amount of native token to receive
      */
-    function withdraw(uint256 value) external override {
+    function withdraw(uint256 value) public override {
         uint256 fee = estimateFee(0);
         _burn(msg.sender, value);
         _chargeFeeFrom(msg.sender, address(this), fee);
         msg.sender.transfer(value);
         emit Withdrawal(msg.sender, value);
+    }
+
+    /**
+     * @notice Remove `amount` tokens owned by caller from circulation, call withdraw function.
+     */
+    function burn(uint256 amount) external override returns (bool) {
+        withdraw(amount);
+        return true;
     }
 }
