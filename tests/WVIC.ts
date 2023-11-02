@@ -6,7 +6,7 @@ import hhe, { ethers } from 'hardhat';
 import { WVIC } from '../typechain-types';
 import { ECDSASignature, EIP712Domain, EIP712TypeDefinition } from './common/EIP712';
 
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 describe('Coin98VRC25 token', async function() {
   let owner: Signer;
@@ -27,7 +27,7 @@ describe('Coin98VRC25 token', async function() {
     const tokenFactory = await hhe.ethers.getContractFactory('WVIC');
     wVICToken = await tokenFactory.connect(owner).deploy();
     await wVICToken.deployed();
-    await wVICToken.setFee(minFee);;
+    await wVICToken.setFee(minFee);
   });
 
   beforeEach(async function() {
@@ -62,27 +62,27 @@ describe('Coin98VRC25 token', async function() {
   it('deposit token with send transaction', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1.0"),
+      value: ethers.utils.parseEther('1.0'),
       gasLimit: 1000000,
-    })
+    });
 
-    expect(await wVICToken.balanceOf(senderAddress)).to.equal(ethers.utils.parseEther("1.0").sub(minFee))
-  })
+    expect(await wVICToken.balanceOf(senderAddress)).to.equal(ethers.utils.parseEther('1.0').sub(minFee));
+  });
 
   it('deposit token with deposit function', async function() {
     await wVICToken.connect(sender).deposit({
-      value: ethers.utils.parseEther("1.0")
-    })
+      value: ethers.utils.parseEther('1.0'),
+    });
 
-    expect(await wVICToken.balanceOf(senderAddress)).to.equal(ethers.utils.parseEther("1.0").sub(minFee))
-  })
+    expect(await wVICToken.balanceOf(senderAddress)).to.equal(ethers.utils.parseEther('1.0').sub(minFee));
+  });
 
   it('should transfer tokens', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
+      value: ethers.utils.parseEther('1000').add(minFee),
       gasLimit: 1000000,
-    })
+    });
     const initialSenderBalance = hhe.ethers.utils.parseEther('1000');
     const transferAmount = hhe.ethers.utils.parseEther('500');
     const initialRecipientBalance = hhe.ethers.BigNumber.from(0);
@@ -98,8 +98,8 @@ describe('Coin98VRC25 token', async function() {
   it('should transfer tokens without fee', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
-    })
+      value: ethers.utils.parseEther('1000').add(minFee),
+    });
     const initialSenderBalance = hhe.ethers.utils.parseEther('1000');
     const transferAmount = hhe.ethers.utils.parseEther('500');
     const initialRecipientBalance = hhe.ethers.BigNumber.from(0);
@@ -116,31 +116,31 @@ describe('Coin98VRC25 token', async function() {
   it('withdraw tokens by withdraw function', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
-    })
+      value: ethers.utils.parseEther('1000').add(minFee),
+    });
 
-    await expect(await wVICToken.connect(sender).withdraw(ethers.utils.parseEther("100")))
-      .to.changeEtherBalance(sender, ethers.utils.parseEther("100"))
-      .to.changeTokenBalance(wVICToken, sender, ethers.utils.parseEther("-100").sub(minFee))
-  })
+    await expect(await wVICToken.connect(sender).withdraw(ethers.utils.parseEther('100')))
+      .to.changeEtherBalance(sender, ethers.utils.parseEther('100'))
+      .to.changeTokenBalance(wVICToken, sender, ethers.utils.parseEther('-100').sub(minFee));
+  });
 
   it('withdraw tokens by burn function', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
-    })
+      value: ethers.utils.parseEther('1000').add(minFee),
+    });
 
-    await expect(await wVICToken.connect(sender).burn(ethers.utils.parseEther("100")))
-      .to.changeEtherBalance(sender, ethers.utils.parseEther("100"))
-      .to.changeTokenBalance(wVICToken, sender, ethers.utils.parseEther("-100").sub(minFee))
-  })
+    await expect(await wVICToken.connect(sender).burn(ethers.utils.parseEther('100')))
+      .to.changeEtherBalance(sender, ethers.utils.parseEther('100'))
+      .to.changeTokenBalance(wVICToken, sender, ethers.utils.parseEther('-100').sub(minFee));
+  });
 
   it('should permit tokens', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
+      value: ethers.utils.parseEther('1000').add(minFee),
       gasLimit: 1000000,
-    })
+    });
     const beforeAllowance = await wVICToken.allowance(senderAddress, recipientAddress);
     const nonceBefore = await wVICToken.nonces(senderAddress);
     const amount = hhe.ethers.utils.parseEther('1000');
@@ -157,9 +157,9 @@ describe('Coin98VRC25 token', async function() {
   it('cannot permit to the zero address', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
+      value: ethers.utils.parseEther('1000').add(minFee),
       gasLimit: 1000000,
-    })
+    });
     const amount = hhe.ethers.utils.parseEther('1000');
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
     const permit = await createPermit(wVICToken, sender, ZERO_ADDRESS, amount, deadline);
@@ -170,9 +170,9 @@ describe('Coin98VRC25 token', async function() {
   it('cannot permit to the wrong address', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
+      value: ethers.utils.parseEther('1000').add(minFee),
       gasLimit: 1000000,
-    })
+    });
     const amount = hhe.ethers.utils.parseEther('1000');
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
     const permit = await createPermit(wVICToken, sender, recipientAddress, amount, deadline);
@@ -183,7 +183,7 @@ describe('Coin98VRC25 token', async function() {
   it('cannot permit with wrong amount', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
+      value: ethers.utils.parseEther('1000').add(minFee),
       gasLimit: 1000000,
     })
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
@@ -195,9 +195,9 @@ describe('Coin98VRC25 token', async function() {
   it('cannot permit expired permit', async function() {
     await sender.sendTransaction({
       to: wVICToken.address,
-      value: ethers.utils.parseEther("1000").add(minFee),
+      value: ethers.utils.parseEther('1000').add(minFee),
       gasLimit: 1000000,
-    })
+    });
     const amount = hhe.ethers.utils.parseEther('1000');
     const deadline =  BigNumber.from(Math.floor(new Date().getTime() / 1000) + 3600);
     const permit = await createPermit(wVICToken, sender, recipientAddress, amount, deadline);
@@ -240,6 +240,6 @@ async function createPermit(token: WVIC, owner: Signer, spenderAddress: string, 
     r: '0x' + signature.substring(2, 66),
     s: '0x' + signature.substring(66, 130),
     v: parseInt(signature.substring(130, 132), 16),
-  }
-  return ecdsaSignature
+  };
+  return ecdsaSignature;
 }
