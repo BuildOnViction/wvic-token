@@ -1,7 +1,6 @@
 import '@nomicfoundation/hardhat-toolbox';
 import dotenv from 'dotenv';
 import 'hardhat-dependency-compiler';
-import 'hardhat-deploy';
 import 'hardhat-gas-reporter';
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -19,12 +18,26 @@ const config: HardhatUserConfig = {
         enabled: false,
         runs: 200,
       },
-      metadata: {
-        // do not include the metadata hash, since this is machine dependent
-        // and we want all generated code to be deterministic
-        // https://docs.soliditylang.org/en/v0.7.6/metadata.html
-        bytecodeHash: 'ipfs',
-      },
+      "outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			}
     },
   },
   networks: {
